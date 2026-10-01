@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <!-- Makes the website look good on phones and computers -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Equipment Borrowing System</title>
+
+    <style>
+        /* ------------------------------
+           GENERAL PAGE DESIGN
+        ------------------------------ */
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        /* Header at the top of the page */
+        header {
+            background-color: #1e3a5f;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Navigation menu */
+        nav {
+            background-color: #ffffff;
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #1e3a5f;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+
+        /* Main content area */
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 30px auto;
+        }
+
+        /* ------------------------------
+           DASHBOARD CARDS
+        ------------------------------ */
+
+        .dashboard {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+
+            /* Allows the cards to have equal sizes */
+            flex: 1;
+
+            min-width: 180px;
+
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            margin-top: 0;
+        }
+
+        .number {
+            font-size: 30px;
+            font-weight: bold;
+            color: #1e3a5f;
+        }
+
+        /* ------------------------------
+           EQUIPMENT TABLE
+        ------------------------------ */
+
+        .section {
+            background-color: white;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 10px;
+
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #1e3a5f;
+            color: white;
+        }
+
+        /* ------------------------------
+           STATUS COLORS
+        ------------------------------ */
+
+        .available {
+            color: green;
+            font-weight: bold;
+        }
+
+        .borrowed {
+            color: red;
+            font-weight: bold;
+        }
+
+        /* ------------------------------
+           BUTTON
+        ------------------------------ */
+
+        button {
+            background-color: #1e3a5f;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2c5282;
+        }
+
+        button:disabled {
+            background-color: #aaa;
+            cursor: not-allowed;
+        }
+
+        /* ------------------------------
+           MOBILE DESIGN
+        ------------------------------ */
+
+        @media (max-width: 600px) {
+
+            /* Stack dashboard cards on small screens */
+            .dashboard {
+                flex-direction: column;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            nav a {
+                display: block;
+                margin: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ==================================
+         HEADER
+    =================================== -->
+
+    <header>
+        <h1>Equipment Borrowing System</h1>
+        <p>College Department Equipment Management</p>
+    </header>
+
+
+    <!-- ==================================
+         NAVIGATION
+    =================================== -->
+
+    <nav>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#equipment">Equipment</a>
+        <a href="#records">Borrowing Records</a>
+    </nav>
+
+
+    <div class="container">
+
+        <!-- ==================================
+             DASHBOARD
+        =================================== -->
+
+        <section id="dashboard">
+
+            <h2>Dashboard</h2>
+
+            <div class="dashboard">
+
+                <!-- Total equipment -->
+                <div class="card">
+                    <h3>Total Equipment</h3>
+
+                    <!-- This number can later come from a database -->
+                    <div class="number">20</div>
+                </div>
+
+                <!-- Available equipment -->
+                <div class="card">
+                    <h3>Available</h3>
+                    <div class="number">15</div>
+                </div>
+
+                <!-- Borrowed equipment -->
+                <div class="card">
+                    <h3>Borrowed</h3>
+                    <div class="number">5</div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ==================================
+             EQUIPMENT LIST
+        =================================== -->
+
+        <section class="section" id="equipment">
+
+            <h2>Equipment List</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Equipment</th>
+                        <th>Quantity</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <!-- Equipment 1 -->
+                    <tr>
+                        <td>Laptop</td>
+                        <td>10</td>
+
+                        <td class="available">
+                            Available
+                        </td>
+
+                        <td>
+                            <button onclick="borrowEquipment('Laptop')">
+                                Borrow
+                            </button>
+                        </td>
+                    </tr>
+
+
+                    <!-- Equipment 2 -->
+                    <tr>
+                        <td>Projector</td>
+                        <td>5</td>
+
+                        <td class="available">
+                            Available
+                        </td>
+
+                        <td>
+                            <button onclick="borrowEquipment('Projector')">
+                                Borrow
+                            </button>
+                        </td>
+                    </tr>
+
+
+                    <!-- Equipment 3 -->
+                    <tr>
+                        <td>Camera</td>
+                        <td>3</td>
+
+                        <td class="borrowed">
+                            Borrowed
+                        </td>
+
+                        <td>
+                            <!-- Button is disabled because the equipment
+                                 is currently unavailable -->
+                            <button disabled>
+                                Unavailable
+                            </button>
+                        </td>
+                    </tr>
+
+
+                    <!-- Equipment 4 -->
+                    <tr>
+                        <td>Speaker</td>
+                        <td>2</td>
+
+                        <td class="available">
+                            Available
+                        </td>
+
+                        <td>
+                            <button onclick="borrowEquipment('Speaker')">
+                                Borrow
+                            </button>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+
+        <!-- ==================================
+             BORROWING RECORDS
+        =================================== -->
+
+        <section class="section" id="records">
+
+            <h2>Borrowing Records</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Borrower</th>
+                        <th>Equipment</th>
+                        <th>Date Borrowed</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>Juan Dela Cruz</td>
+                        <td>Laptop</td>
+                        <td>October 1, 2026</td>
+
+                        <td class="borrowed">
+                            Borrowed
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Maria Santos</td>
+                        <td>Projector</td>
+                        <td>October 1, 2026</td>
+
+                        <td class="borrowed">
+                            Borrowed
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </section>
+
+    </div>
+
+
+    <!-- ==================================
+         JAVASCRIPT
+    =================================== -->
+
+    <script>
+
+        // This function runs when the user clicks
+        // the "Borrow" button.
+
+        function borrowEquipment(equipmentName) {
+
+            // Show a simple confirmation message
+            alert(
+                "You selected " +
+                equipmentName +
+                " for borrowing."
+            );
+
+            /*
+                NOTE:
+
+                This is only a basic UI demonstration.
+
+                In a real system, this button should:
+                1. Open a borrowing form.
+                2. Ask for the borrower's name.
+                3. Ask for the date.
+                4. Save the borrowing record.
+                5. Change the equipment status.
+            */
+        }
+
+    </script>
+
+</body>
+</html>
