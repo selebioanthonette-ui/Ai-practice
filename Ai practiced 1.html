@@ -1,0 +1,1731 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <!-- =========================================
+         BASIC PAGE INFORMATION
+    ========================================== -->
+
+    <meta charset="UTF-8">
+
+    <!-- Makes the website responsive on phones -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Equipment Borrowing System</title>
+
+
+    <!-- =========================================
+         CSS - DESIGN OF THE SYSTEM
+    ========================================== -->
+
+    <style>
+
+        /* -----------------------------------------
+           GENERAL DESIGN
+        ----------------------------------------- */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+
+            /* Light green background */
+            background-color: #f1f8f3;
+
+            color: #333;
+        }
+
+
+        /* -----------------------------------------
+           HEADER
+        ----------------------------------------- */
+
+        header {
+            background-color: #198754;
+            color: white;
+
+            padding: 20px;
+
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        header p {
+            margin-bottom: 0;
+        }
+
+
+        /* -----------------------------------------
+           NAVIGATION BAR
+        ----------------------------------------- */
+
+        nav {
+            background-color: #146c43;
+
+            display: flex;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+
+            padding: 10px;
+        }
+
+        nav button {
+            background-color: transparent;
+
+            color: white;
+
+            border: none;
+
+            padding: 12px 18px;
+
+            cursor: pointer;
+
+            font-size: 15px;
+        }
+
+        nav button:hover {
+            background-color: #198754;
+        }
+
+
+        /* -----------------------------------------
+           MAIN CONTENT
+        ----------------------------------------- */
+
+        .container {
+            width: 90%;
+
+            max-width: 1200px;
+
+            margin: 30px auto;
+        }
+
+
+        /* -----------------------------------------
+           UI SECTIONS
+        ----------------------------------------- */
+
+        .page {
+            display: none;
+        }
+
+        /* This makes the selected page visible */
+        .page.active {
+            display: block;
+        }
+
+
+        /* -----------------------------------------
+           DASHBOARD CARDS
+        ----------------------------------------- */
+
+        .dashboard {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(200px, 1fr));
+
+            gap: 20px;
+        }
+
+        .card {
+            background-color: white;
+
+            padding: 25px;
+
+            border-radius: 10px;
+
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+
+            border-left: 5px solid #198754;
+        }
+
+        .card h3 {
+            margin-top: 0;
+
+            color: #555;
+        }
+
+        .card .number {
+            font-size: 35px;
+
+            font-weight: bold;
+
+            color: #198754;
+        }
+
+
+        /* -----------------------------------------
+           CONTENT BOX
+        ----------------------------------------- */
+
+        .box {
+            background-color: white;
+
+            padding: 25px;
+
+            margin-top: 25px;
+
+            border-radius: 10px;
+
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+
+        /* -----------------------------------------
+           TABLE
+        ----------------------------------------- */
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            margin-top: 15px;
+        }
+
+        th {
+            background-color: #198754;
+
+            color: white;
+
+            padding: 12px;
+
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #f5fff8;
+        }
+
+
+        /* -----------------------------------------
+           STATUS
+        ----------------------------------------- */
+
+        .available {
+            color: #198754;
+
+            font-weight: bold;
+        }
+
+        .borrowed {
+            color: #dc3545;
+
+            font-weight: bold;
+        }
+
+        .returned {
+            color: #198754;
+
+            font-weight: bold;
+        }
+
+
+        /* -----------------------------------------
+           BUTTONS
+        ----------------------------------------- */
+
+        .btn {
+            border: none;
+
+            padding: 9px 15px;
+
+            border-radius: 5px;
+
+            cursor: pointer;
+
+            color: white;
+
+            margin: 2px;
+        }
+
+        .btn-green {
+            background-color: #198754;
+        }
+
+        .btn-green:hover {
+            background-color: #157347;
+        }
+
+        .btn-red {
+            background-color: #dc3545;
+        }
+
+        .btn-red:hover {
+            background-color: #bb2d3b;
+        }
+
+        .btn-gray {
+            background-color: #6c757d;
+        }
+
+
+        /* -----------------------------------------
+           FORM
+        ----------------------------------------- */
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+
+            margin-bottom: 5px;
+
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+
+            padding: 10px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 5px;
+        }
+
+
+        /* -----------------------------------------
+           TWO COLUMN FORM
+        ----------------------------------------- */
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 15px;
+        }
+
+
+        /* -----------------------------------------
+           MESSAGE
+        ----------------------------------------- */
+
+        .message {
+            padding: 12px;
+
+            margin-top: 15px;
+
+            border-radius: 5px;
+
+            display: none;
+        }
+
+        .success {
+            background-color: #d1e7dd;
+
+            color: #0f5132;
+        }
+
+        .error {
+            background-color: #f8d7da;
+
+            color: #842029;
+        }
+
+
+        /* -----------------------------------------
+           MOBILE DESIGN
+        ----------------------------------------- */
+
+        @media (max-width: 600px) {
+
+            .container {
+                width: 95%;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th,
+            td {
+                padding: 8px;
+            }
+
+            nav button {
+                width: 50%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         HEADER
+    ========================================== -->
+
+    <header>
+
+        <h1>Equipment Borrowing System</h1>
+
+        <p>
+            College Department Equipment Management
+        </p>
+
+    </header>
+
+
+    <!-- =========================================
+         NAVIGATION
+    ========================================== -->
+
+    <nav>
+
+        <!-- Each button opens a different UI -->
+
+        <button onclick="showPage('dashboard')">
+            Dashboard
+        </button>
+
+        <button onclick="showPage('equipment')">
+            Equipment
+        </button>
+
+        <button onclick="showPage('borrow')">
+            Borrow Equipment
+        </button>
+
+        <button onclick="showPage('records')">
+            Borrowing Records
+        </button>
+
+        <button onclick="showPage('manage')">
+            Manage Equipment
+        </button>
+
+    </nav>
+
+
+    <div class="container">
+
+
+        <!-- =========================================
+             UI #1 - DASHBOARD
+        ========================================== -->
+
+        <section id="dashboard" class="page active">
+
+            <h2>Dashboard</h2>
+
+            <div class="dashboard">
+
+                <!-- Total equipment -->
+                <div class="card">
+
+                    <h3>Total Equipment</h3>
+
+                    <div
+                        class="number"
+                        id="totalEquipment">
+                        0
+                    </div>
+
+                </div>
+
+
+                <!-- Available equipment -->
+                <div class="card">
+
+                    <h3>Available Items</h3>
+
+                    <div
+                        class="number"
+                        id="availableEquipment">
+                        0
+                    </div>
+
+                </div>
+
+
+                <!-- Borrowed equipment -->
+                <div class="card">
+
+                    <h3>Borrowed Items</h3>
+
+                    <div
+                        class="number"
+                        id="borrowedEquipment">
+                        0
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Simple explanation -->
+            <div class="box">
+
+                <h3>Welcome!</h3>
+
+                <p>
+                    This system helps the department track
+                    equipment that is available, borrowed,
+                    and returned.
+                </p>
+
+                <p>
+                    Use the navigation menu above to manage
+                    equipment and borrowing records.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================
+             UI #2 - EQUIPMENT LIST
+        ========================================== -->
+
+        <section id="equipment" class="page">
+
+            <h2>Equipment List</h2>
+
+            <div class="box">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Equipment</th>
+
+                            <th>Total Quantity</th>
+
+                            <th>Available</th>
+
+                            <th>Status</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <!-- JavaScript will put equipment here -->
+                    <tbody id="equipmentTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================
+             UI #3 - BORROW EQUIPMENT
+        ========================================== -->
+
+        <section id="borrow" class="page">
+
+            <h2>Borrow Equipment</h2>
+
+            <div class="box">
+
+                <form id="borrowForm">
+
+
+                    <div class="form-grid">
+
+
+                        <!-- Borrower's name -->
+                        <div class="form-group">
+
+                            <label>
+                                Borrower's Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="borrowerName"
+                                placeholder="Enter name"
+                                required>
+
+                        </div>
+
+
+                        <!-- Student or Faculty -->
+                        <div class="form-group">
+
+                            <label>
+                                User Type
+                            </label>
+
+                            <select id="userType" required>
+
+                                <option value="">
+                                    Select User Type
+                                </option>
+
+                                <option value="Student">
+                                    Student
+                                </option>
+
+                                <option value="Faculty">
+                                    Faculty
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Equipment -->
+                        <div class="form-group">
+
+                            <label>
+                                Equipment
+                            </label>
+
+                            <select
+                                id="borrowEquipment"
+                                required>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- Quantity -->
+                        <div class="form-group">
+
+                            <label>
+                                Quantity
+                            </label>
+
+                            <input
+                                type="number"
+                                id="borrowQuantity"
+                                min="1"
+                                value="1"
+                                required>
+
+                        </div>
+
+
+                        <!-- Borrow date -->
+                        <div class="form-group">
+
+                            <label>
+                                Borrow Date
+                            </label>
+
+                            <input
+                                type="date"
+                                id="borrowDate"
+                                required>
+
+                        </div>
+
+
+                        <!-- Expected return -->
+                        <div class="form-group">
+
+                            <label>
+                                Expected Return Date
+                            </label>
+
+                            <input
+                                type="date"
+                                id="returnDate"
+                                required>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-green">
+
+                        Borrow Equipment
+
+                    </button>
+
+
+                </form>
+
+
+                <!-- Message displayed after borrowing -->
+                <div
+                    id="borrowMessage"
+                    class="message success">
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================
+             UI #4 - BORROWING RECORDS
+        ========================================== -->
+
+        <section id="records" class="page">
+
+            <h2>Borrowing Records</h2>
+
+            <div class="box">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Borrower</th>
+
+                            <th>User Type</th>
+
+                            <th>Equipment</th>
+
+                            <th>Quantity</th>
+
+                            <th>Borrow Date</th>
+
+                            <th>Return Date</th>
+
+                            <th>Status</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="recordsTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================
+             UI #5 - MANAGE EQUIPMENT
+        ========================================== -->
+
+        <section id="manage" class="page">
+
+            <h2>Manage Equipment</h2>
+
+
+            <!-- ADD EQUIPMENT -->
+            <div class="box">
+
+                <h3>Add New Equipment</h3>
+
+                <form id="equipmentForm">
+
+                    <div class="form-grid">
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Equipment Name
+                            </label>
+
+                            <input
+                                type="text"
+                                id="equipmentName"
+                                placeholder="Example: Laptop"
+                                required>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Quantity
+                            </label>
+
+                            <input
+                                type="number"
+                                id="equipmentQuantity"
+                                min="1"
+                                required>
+
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-green">
+
+                        Add Equipment
+
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- EQUIPMENT MANAGEMENT TABLE -->
+            <div class="box">
+
+                <h3>Equipment Inventory</h3>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Equipment</th>
+
+                            <th>Total</th>
+
+                            <th>Available</th>
+
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="manageTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </div>
+
+
+
+    <!-- =========================================
+         JAVASCRIPT
+         This is what makes the UI WORK.
+    ========================================== -->
+
+    <script>
+
+
+        /* =========================================
+           TEMPORARY EQUIPMENT DATA
+
+           IMPORTANT:
+
+           Because we are NOT using a database,
+           the information is stored here temporarily.
+
+           If you refresh the page, the data will
+           return to these original values.
+        ========================================== */
+
+        let equipment = [
+
+            {
+                id: 1,
+                name: "Laptop",
+                total: 10,
+                available: 10
+            },
+
+            {
+                id: 2,
+                name: "Projector",
+                total: 5,
+                available: 5
+            },
+
+            {
+                id: 3,
+                name: "Camera",
+                total: 3,
+                available: 3
+            },
+
+            {
+                id: 4,
+                name: "Speaker",
+                total: 2,
+                available: 2
+            }
+
+        ];
+
+
+        /* =========================================
+           TEMPORARY BORROWING RECORDS
+
+           This will also disappear after refreshing
+           the page because there is no database yet.
+        ========================================== */
+
+        let borrowingRecords = [];
+
+
+        /* =========================================
+           CHANGE PAGE
+
+           This function shows one UI and hides
+           the other UIs.
+        ========================================== */
+
+        function showPage(pageName) {
+
+            // Get all pages
+            let pages =
+                document.querySelectorAll(".page");
+
+
+            // Hide all pages
+            pages.forEach(function(page) {
+
+                page.classList.remove("active");
+
+            });
+
+
+            // Show the selected page
+            document
+                .getElementById(pageName)
+                .classList.add("active");
+
+
+            // Refresh the information
+            updateAll();
+
+        }
+
+
+        /* =========================================
+           UPDATE EVERYTHING
+
+           This function updates all parts of
+           the system.
+        ========================================== */
+
+        function updateAll() {
+
+            updateDashboard();
+
+            displayEquipment();
+
+            displayBorrowingRecords();
+
+            displayManageEquipment();
+
+            updateEquipmentDropdown();
+
+        }
+
+
+        /* =========================================
+           UPDATE DASHBOARD
+        ========================================== */
+
+        function updateDashboard() {
+
+            // Calculate total equipment
+            let total = 0;
+
+            // Calculate available equipment
+            let available = 0;
+
+
+            equipment.forEach(function(item) {
+
+                total += item.total;
+
+                available += item.available;
+
+            });
+
+
+            // Borrowed = Total - Available
+            let borrowed = total - available;
+
+
+            // Put the numbers into the dashboard
+            document.getElementById(
+                "totalEquipment"
+            ).textContent = total;
+
+
+            document.getElementById(
+                "availableEquipment"
+            ).textContent = available;
+
+
+            document.getElementById(
+                "borrowedEquipment"
+            ).textContent = borrowed;
+
+        }
+
+
+        /* =========================================
+           DISPLAY EQUIPMENT TABLE
+        ========================================== */
+
+        function displayEquipment() {
+
+            let table =
+                document.getElementById(
+                    "equipmentTable"
+                );
+
+
+            // Clear old information
+            table.innerHTML = "";
+
+
+            equipment.forEach(function(item) {
+
+                // Determine status
+                let status =
+                    item.available > 0
+                    ? "Available"
+                    : "Borrowed";
+
+
+                // Determine color
+                let statusClass =
+                    item.available > 0
+                    ? "available"
+                    : "borrowed";
+
+
+                // Add row to table
+                table.innerHTML += `
+
+                    <tr>
+
+                        <td>
+                            ${item.name}
+                        </td>
+
+                        <td>
+                            ${item.total}
+                        </td>
+
+                        <td>
+                            ${item.available}
+                        </td>
+
+                        <td class="${statusClass}">
+                            ${status}
+                        </td>
+
+                        <td>
+
+                            ${
+                                item.available > 0
+
+                                ?
+
+                                `<button
+                                    class="btn btn-green"
+                                    onclick="selectEquipment(${item.id})">
+
+                                    Borrow
+
+                                </button>`
+
+                                :
+
+                                `<button
+                                    class="btn btn-gray"
+                                    disabled>
+
+                                    Unavailable
+
+                                </button>`
+                            }
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            });
+
+        }
+
+
+        /* =========================================
+           SELECT EQUIPMENT
+
+           When the user clicks Borrow from the
+           equipment list, this opens the borrowing UI.
+        ========================================== */
+
+        function selectEquipment(id) {
+
+            // Open borrowing page
+            showPage("borrow");
+
+
+            // Select the equipment
+            document.getElementById(
+                "borrowEquipment"
+            ).value = id;
+
+        }
+
+
+        /* =========================================
+           EQUIPMENT DROPDOWN
+        ========================================== */
+
+        function updateEquipmentDropdown() {
+
+            let dropdown =
+                document.getElementById(
+                    "borrowEquipment"
+                );
+
+
+            // Clear dropdown
+            dropdown.innerHTML =
+                `<option value="">
+                    Select Equipment
+                </option>`;
+
+
+            equipment.forEach(function(item) {
+
+                // Only show equipment that has
+                // at least 1 available item
+                if (item.available > 0) {
+
+                    dropdown.innerHTML += `
+
+                        <option value="${item.id}">
+
+                            ${item.name}
+                            (${item.available} available)
+
+                        </option>
+
+                    `;
+
+                }
+
+            });
+
+        }
+
+
+        /* =========================================
+           BORROW EQUIPMENT
+
+           This runs when the Borrow Equipment
+           form is submitted.
+        ========================================== */
+
+        document
+            .getElementById("borrowForm")
+            .addEventListener(
+                "submit",
+                function(event) {
+
+                    // Stop page from refreshing
+                    event.preventDefault();
+
+
+                    // Get form values
+                    let name =
+                        document.getElementById(
+                            "borrowerName"
+                        ).value;
+
+                    let userType =
+                        document.getElementById(
+                            "userType"
+                        ).value;
+
+                    let equipmentId =
+                        Number(
+                            document.getElementById(
+                                "borrowEquipment"
+                            ).value
+                        );
+
+                    let quantity =
+                        Number(
+                            document.getElementById(
+                                "borrowQuantity"
+                            ).value
+                        );
+
+                    let borrowDate =
+                        document.getElementById(
+                            "borrowDate"
+                        ).value;
+
+                    let returnDate =
+                        document.getElementById(
+                            "returnDate"
+                        ).value;
+
+
+                    // Find the selected equipment
+                    let item =
+                        equipment.find(
+                            function(e) {
+
+                                return e.id === equipmentId;
+
+                            }
+                        );
+
+
+                    /* ---------------------------------
+                       CHECK IF EQUIPMENT EXISTS
+                    --------------------------------- */
+
+                    if (!item) {
+
+                        alert(
+                            "Please select equipment."
+                        );
+
+                        return;
+
+                    }
+
+
+                    /* ---------------------------------
+                       CHECK AVAILABLE QUANTITY
+                    --------------------------------- */
+
+                    if (quantity > item.available) {
+
+                        alert(
+                            "Not enough equipment available."
+                        );
+
+                        return;
+
+                    }
+
+
+                    /* ---------------------------------
+                       CREATE BORROWING RECORD
+                    --------------------------------- */
+
+                    let record = {
+
+                        id:
+                            Date.now(),
+
+                        borrower:
+                            name,
+
+                        userType:
+                            userType,
+
+                        equipmentId:
+                            equipmentId,
+
+                        equipmentName:
+                            item.name,
+
+                        quantity:
+                            quantity,
+
+                        borrowDate:
+                            borrowDate,
+
+                        returnDate:
+                            returnDate,
+
+                        status:
+                            "Borrowed"
+
+                    };
+
+
+                    // Add record to our temporary list
+                    borrowingRecords.push(record);
+
+
+                    // Reduce available equipment
+                    item.available -= quantity;
+
+
+                    // Show success message
+                    let message =
+                        document.getElementById(
+                            "borrowMessage"
+                        );
+
+
+                    message.textContent =
+                        "Equipment successfully borrowed!";
+
+
+                    message.style.display =
+                        "block";
+
+
+                    /* ---------------------------------
+                       CLEAR FORM
+                    --------------------------------- */
+
+                    document
+                        .getElementById(
+                            "borrowForm"
+                        )
+                        .reset();
+
+
+                    /* ---------------------------------
+                       UPDATE THE SYSTEM
+                    --------------------------------- */
+
+                    updateAll();
+
+                }
+            );
+
+
+        /* =========================================
+           DISPLAY BORROWING RECORDS
+        ========================================== */
+
+        function displayBorrowingRecords() {
+
+            let table =
+                document.getElementById(
+                    "recordsTable"
+                );
+
+
+            table.innerHTML = "";
+
+
+            /* ---------------------------------
+               IF THERE ARE NO RECORDS
+            --------------------------------- */
+
+            if (borrowingRecords.length === 0) {
+
+                table.innerHTML = `
+
+                    <tr>
+
+                        <td colspan="8"
+                            style="text-align:center">
+
+                            No borrowing records yet.
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+                return;
+
+            }
+
+
+            /* ---------------------------------
+               DISPLAY EACH RECORD
+            --------------------------------- */
+
+            borrowingRecords.forEach(
+                function(record) {
+
+                    table.innerHTML += `
+
+                        <tr>
+
+                            <td>
+                                ${record.borrower}
+                            </td>
+
+                            <td>
+                                ${record.userType}
+                            </td>
+
+                            <td>
+                                ${record.equipmentName}
+                            </td>
+
+                            <td>
+                                ${record.quantity}
+                            </td>
+
+                            <td>
+                                ${record.borrowDate}
+                            </td>
+
+                            <td>
+                                ${record.returnDate}
+                            </td>
+
+                            <td class="borrowed">
+
+                                ${record.status}
+
+                            </td>
+
+                            <td>
+
+                                ${
+                                    record.status ===
+                                    "Borrowed"
+
+                                    ?
+
+                                    `<button
+                                        class="btn btn-green"
+                                        onclick="returnEquipment(${record.id})">
+
+                                        Return
+
+                                    </button>`
+
+                                    :
+
+                                    `<span class="returned">
+                                        Returned
+                                    </span>`
+                                }
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            );
+
+        }
+
+
+        /* =========================================
+           RETURN EQUIPMENT
+        ========================================== */
+
+        function returnEquipment(recordId) {
+
+            // Find the borrowing record
+            let record =
+                borrowingRecords.find(
+                    function(r) {
+
+                        return r.id === recordId;
+
+                    }
+                );
+
+
+            // Stop if record doesn't exist
+            if (!record) {
+
+                return;
+
+            }
+
+
+            // Find the equipment
+            let item =
+                equipment.find(
+                    function(e) {
+
+                        return e.id ===
+                            record.equipmentId;
+
+                    }
+                );
+
+
+            /* ---------------------------------
+               ADD THE EQUIPMENT BACK
+               TO AVAILABLE QUANTITY
+            --------------------------------- */
+
+            if (item) {
+
+                item.available +=
+                    record.quantity;
+
+            }
+
+
+            // Change record status
+            record.status = "Returned";
+
+
+            // Refresh system
+            updateAll();
+
+
+            alert(
+                "Equipment has been returned."
+            );
+
+        }
+
+
+        /* =========================================
+           ADD NEW EQUIPMENT
+        ========================================== */
+
+        document
+            .getElementById("equipmentForm")
+            .addEventListener(
+                "submit",
+                function(event) {
+
+                    // Stop page refresh
+                    event.preventDefault();
+
+
+                    // Get values
+                    let name =
+                        document.getElementById(
+                            "equipmentName"
+                        ).value;
+
+
+                    let quantity =
+                        Number(
+                            document.getElementById(
+                                "equipmentQuantity"
+                            ).value
+                        );
+
+
+                    /* ---------------------------------
+                       CREATE NEW EQUIPMENT
+                    --------------------------------- */
+
+                    let newEquipment = {
+
+                        id:
+                            Date.now(),
+
+                        name:
+                            name,
+
+                        total:
+                            quantity,
+
+                        available:
+                            quantity
+
+                    };
+
+
+                    // Add equipment
+                    equipment.push(
+                        newEquipment
+                    );
+
+
+                    // Clear form
+                    document
+                        .getElementById(
+                            "equipmentForm"
+                        )
+                        .reset();
+
+
+                    // Update system
+                    updateAll();
+
+
+                    alert(
+                        "Equipment added successfully!"
+                    );
+
+                }
+            );
+
+
+        /* =========================================
+           DISPLAY MANAGE EQUIPMENT TABLE
+        ========================================== */
+
+        function displayManageEquipment() {
+
+            let table =
+                document.getElementById(
+                    "manageTable"
+                );
+
+
+            table.innerHTML = "";
+
+
+            equipment.forEach(function(item) {
+
+                table.innerHTML += `
+
+                    <tr>
+
+                        <td>
+                            ${item.name}
+                        </td>
+
+                        <td>
+                            ${item.total}
+                        </td>
+
+                        <td>
+                            ${item.available}
+                        </td>
+
+                        <td>
+
+                            <button
+                                class="btn btn-red"
+                                onclick="deleteEquipment(${item.id})">
+
+                                Delete
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+            });
+
+        }
+
+
+        /* =========================================
+           DELETE EQUIPMENT
+        ========================================== */
+
+        function deleteEquipment(id) {
+
+            // Find equipment
+            let item =
+                equipment.find(
+                    function(e) {
+
+                        return e.id === id;
+
+                    }
+                );
+
+
+            // Don't delete equipment that is borrowed
+            if (
+                item.available !==
+                item.total
+            ) {
+
+                alert(
+                    "You cannot delete equipment that is currently borrowed."
+                );
+
+                return;
+
+            }
+
+
+            // Ask for confirmation
+            let confirmDelete =
+                confirm(
+                    "Are you sure you want to delete " +
+                    item.name +
+                    "?"
+                );
+
+
+            if (!confirmDelete) {
+
+                return;
+
+            }
+
+
+            // Remove equipment from array
+            equipment =
+                equipment.filter(
+                    function(e) {
+
+                        return e.id !== id;
+
+                    }
+                );
+
+
+            // Update system
+            updateAll();
+
+        }
+
+
+        /* =========================================
+           START THE SYSTEM
+        ========================================== */
+
+        // Display all information when
+        // the page first loads.
+        updateAll();
+
+
+    </script>
+
+</body>
+
+</html>
